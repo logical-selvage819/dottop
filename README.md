@@ -7,6 +7,8 @@
   <img src="preview.png" alt="dottop live dashboard" width="900">
 </p>
 
+> **Note:** this is a vibecoded project — built in a single sitting with heavy AI assistance. It's been smoke-tested against real ASP.NET Core apps and the core path works, but expect rough edges and missing corner cases. Issues and PRs welcome.
+
 ---
 
 ## Why
