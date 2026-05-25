@@ -1,0 +1,118 @@
+name: release
+
+on:
+  push:
+    branches: [release]
+  workflow_dispatch:
+    inputs:
+      version_suffix:
+        description: "Optional suffix appended to the version (e.g. -rc1)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Build single-file binaries
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Compute version
+        id: ver
+        run: |
+          VERSION="0.1.${{ github.run_number }}${{ github.event.inputs.version_suffix }}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION"     >> "$GITHUB_OUTPUT"
+          echo "Building dottop v$VERSION"
+
+      - name: Restore
+        run: dotnet restore src/DotTop/DotTop.csproj
+
+      - name: Publish linux-x64
+        run: |
+          dotnet publish src/DotTop/DotTop.csproj \
+            -c Release -r linux-x64 --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:EnableCompressionInSingleFile=true \
+            -p:DebugType=none -p:DebugSymbols=false \
+            -p:Version=${{ steps.ver.outputs.version }} \
+            -o publish/linux-x64
+
+      - name: Publish linux-arm64
+        run: |
+          dotnet publish src/DotTop/DotTop.csproj \
+            -c Release -r linux-arm64 --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:EnableCompressionInSingleFile=true \
+            -p:DebugType=none -p:DebugSymbols=false \
+            -p:Version=${{ steps.ver.outputs.version }} \
+            -o publish/linux-arm64
+
+      - name: Publish linux-musl-x64 (Alpine)
+        run: |
+          dotnet publish src/DotTop/DotTop.csproj \
+            -c Release -r linux-musl-x64 --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:EnableCompressionInSingleFile=true \
+            -p:DebugType=none -p:DebugSymbols=false \
+            -p:Version=${{ steps.ver.outputs.version }} \
+            -o publish/linux-musl-x64
+
+      - name: Publish win-x64
+        run: |
+          dotnet publish src/DotTop/DotTop.csproj \
+            -c Release -r win-x64 --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:EnableCompressionInSingleFile=true \
+            -p:DebugType=none -p:DebugSymbols=false \
+            -p:Version=${{ steps.ver.outputs.version }} \
+            -o publish/win-x64
+
+      - name: Package artifacts
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          VER="${{ steps.ver.outputs.version }}"
+
+          chmod +x publish/linux-x64/dottop publish/linux-arm64/dottop publish/linux-musl-x64/dottop
+
+          tar -C publish/linux-x64      -czf "artifacts/dottop-${VER}-linux-x64.tar.gz"      dottop
+          tar -C publish/linux-arm64    -czf "artifacts/dottop-${VER}-linux-arm64.tar.gz"    dottop
+          tar -C publish/linux-musl-x64 -czf "artifacts/dottop-${VER}-linux-musl-x64.tar.gz" dottop
+          (cd publish/win-x64 && zip -j "../../artifacts/dottop-${VER}-win-x64.zip" dottop.exe)
+
+          (cd artifacts && sha256sum *.tar.gz *.zip > "SHA256SUMS")
+          ls -lh artifacts
+
+      - name: Upload build artifacts (workflow run)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dottop-${{ steps.ver.outputs.version }}
+          path: artifacts/*
+          retention-days: 30
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.ver.outputs.tag }}
+          name: dottop ${{ steps.ver.outputs.tag }}
+          generate_release_notes: true
+          make_latest: true
+          files: |
+            artifacts/*.tar.gz
+            artifacts/*.zip
+            artifacts/SHA256SUMS

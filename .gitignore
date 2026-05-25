@@ -1,0 +1,63 @@
+# .NET build outputs
+bin/
+obj/
+publish/
+out/
+artifacts/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# Single-file publish leftovers
+*.pdb
+*.dll
+*.exe
+*.so
+*.dylib
+
+# But keep the bare ELF/exe we ship under a release tree if ever committed
+!publish/*/dottop
+!publish/*/dottop.exe
+
+# IDE / editor
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userprefs
+*.swp
+*~
+
+# Test / coverage
+TestResults/
+*.coverage
+*.coveragexml
+coverage*.json
+
+# Tooling
+.dotnet/
+.nuget/
+.config/dotnet-tools.local.json
+project.lock.json
+project.assets.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs / dumps
+*.log
+*.dmp
+*.nettrace
+
+# Local secrets / overrides
+.env
+.env.local
+appsettings.Local.json
+
+# Misc
+*.received.*
