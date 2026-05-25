@@ -213,26 +213,18 @@ Current and total connections.
 
 ## How it works
 
-```
-┌──────────────────────────────────────────────────────────────────────────┐
-│  dottop                                                                   │
-│                                                                           │
-│  ┌──────────────┐    ┌────────────────────┐    ┌────────────────────┐    │
-│  │  Discovery   │──▶│  Diagnostics layer  │──▶│ Metrics aggregator │    │
-│  │              │    │  EventPipeSession   │    │  - time series     │    │
-│  │ GetPublished │    │  TraceEvent pump    │    │  - latency window  │    │
-│  │ Processes()  │    │  - System.Runtime   │    │  - endpoint table  │    │
-│  │              │    │  - AspNetCore.*     │    │                    │    │
-│  └──────────────┘    │  - Kestrel          │    └─────────┬──────────┘    │
-│                      │  - TplEventSource   │              │               │
-│                      │    (ActivityID)     │              ▼               │
-│                      └─────────┬───────────┘    ┌────────────────────┐    │
-│                                │ IPC over        │  Spectre.Console    │   │
-│                                ▼ /tmp socket     │  Live dashboard     │   │
-│                      ┌────────────────────┐      └────────────────────┘    │
-│                      │  Target .NET app   │                                │
-│                      └────────────────────┘                                │
-└──────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    A["Discovery<br/>GetPublishedProcesses()"]
+    B["Diagnostics layer<br/>EventPipeSession + TraceEvent<br/>System.Runtime · AspNetCore.* · Kestrel<br/>TplEventSource (ActivityID)"]
+    C["Metrics aggregator<br/>time series<br/>latency window<br/>endpoint table"]
+    D["Spectre.Console<br/>Live dashboard"]
+    E[("Target .NET app")]
+
+    A --> B
+    B --> C
+    C --> D
+    B <-.->|"IPC /tmp socket"| E
 ```
 
 Key design notes:
@@ -275,7 +267,7 @@ dotnet publish src/DotTop -c Release -r linux-musl-x64 --self-contained true \
   -o publish/linux-musl-x64
 
 # Windows x64
-dotnet publish src/DotTop -c Release -r win-x64    --self-contained true \
+dotnet publish src/DotTop -c Release -r win-x64 --self-contained true \
   -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
   -o publish/win-x64
 ```
