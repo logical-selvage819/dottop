@@ -3,31 +3,9 @@
 > **htop for ASP.NET Core and .NET applications.**
 > A zero-configuration, terminal-based real-time monitor that attaches to any running .NET process and streams live runtime + ASP.NET Core metrics — no SDK integration, no code change, no restart.
 
-```
-╭──── dottop ─────────────────────────────────────────────────────────────────────────╮
-│ payment-api  pid 26700   runtime 10.0.0   uptime 2h13m   attached 00m42s   q quit  │
-╰─────────────────────────────────────────────────────────────────────────────────────╯
-╭──── Runtime ────────────────────╮ ╭──── ASP.NET Core ────────────────────────╮
-│ CPU         23.4 %   ▁▂▃▅▇▆▄▃▂▁ │ │ Req/sec     42.1                         │
-│ Working set 312 MB   ▃▄▅▅▆▆▇▇   │ │ Active        12                         │
-│ GC heap      78 MB   ▂▂▃▃▄▄▅    │ │ Total req     84 213                     │
-│ Allocs       2.1 MB/s ▃▅▇▆▄▃▂   │ │ Failed        13                         │
-│ Time in GC   1.4 %   ▁▁▁▂▁▁▁    │ │                                          │
-│ Threads        24    ▆▆▆▆▆▆▆▆   │ │ Latency (window) 1024 samples            │
-│ TP queue        0    ▁▁▁▁▁▁▁▁   │ │   avg     18.2 ms                        │
-│ Exceptions   0.2 /s  ▁▁▁▁▂▁▁    │ │   p50     12.0 ms                        │
-│                                  │ │   p95    124.4 ms                        │
-│ GC counts  g0 142  g1 12  g2 2  │ │   p99    335.5 ms                        │
-╰──────────────────────────────────╯ │ Connections   87 active                  │
-                                     ╰──────────────────────────────────────────╯
-╭──── Hottest endpoints ──────────────────────────────────────────────────────────────╮
-│ Method  Path                                          Count    Avg ms    Max ms  5xx │
-│ GET     /api/orders                                    18 432   12.4     245.0    0  │
-│ POST    /api/orders/checkout                              412   89.1     410.2    3  │
-│ GET     /api/products/search                            7 211   31.6     188.0    0  │
-│ …                                                                                    │
-╰──────────────────────────────────────────────────────────────────────────────────────╯
-```
+<p align="center">
+  <img src="preview.png" alt="dottop live dashboard" width="900">
+</p>
 
 ---
 
