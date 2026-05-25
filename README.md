@@ -66,7 +66,7 @@ Grab the latest single-file binary from the [Releases](../../releases) page.
 ### Linux (glibc — Debian, Ubuntu, RHEL, etc.)
 
 ```bash
-curl -sLO https://github.com/<owner>/dottop/releases/latest/download/dottop-<ver>-linux-x64.tar.gz
+curl -sLO https://github.com/ismkdc/dottop/releases/latest/download/dottop-<ver>-linux-x64.tar.gz
 tar -xzf dottop-*-linux-x64.tar.gz
 sudo install -m 755 dottop /usr/local/bin/dottop
 dottop --help
@@ -75,7 +75,7 @@ dottop --help
 ### Linux ARM64 (e.g. Raspberry Pi 4/5, AWS Graviton)
 
 ```bash
-curl -sLO https://github.com/<owner>/dottop/releases/latest/download/dottop-<ver>-linux-arm64.tar.gz
+curl -sLO https://github.com/ismkdc/dottop/releases/latest/download/dottop-<ver>-linux-arm64.tar.gz
 tar -xzf dottop-*-linux-arm64.tar.gz
 sudo install -m 755 dottop /usr/local/bin/dottop
 ```
@@ -83,7 +83,7 @@ sudo install -m 755 dottop /usr/local/bin/dottop
 ### Alpine / musl
 
 ```bash
-curl -sLO https://github.com/<owner>/dottop/releases/latest/download/dottop-<ver>-linux-musl-x64.tar.gz
+curl -sLO https://github.com/ismkdc/dottop/releases/latest/download/dottop-<ver>-linux-musl-x64.tar.gz
 tar -xzf dottop-*-linux-musl-x64.tar.gz
 sudo install -m 755 dottop /usr/local/bin/dottop
 ```
@@ -269,7 +269,7 @@ Key design notes:
 Requires the **.NET 10 SDK**.
 
 ```bash
-git clone https://github.com/<owner>/dottop.git
+git clone https://github.com/ismkdc/dottop.git
 cd dottop
 dotnet build -c Release
 dotnet run --project src/DotTop -- --help
