@@ -35,7 +35,7 @@ You have an ASP.NET Core or .NET service running in prod, in a container, or on 
 - **Hottest endpoints table** — top routes by traffic, with avg / max latency and 5xx counts
 - **Sparklines everywhere** — Unicode block-character mini-charts for trend at a glance
 - **Cross-platform** — Linux x64 / arm64, Windows x64, Alpine (musl)
-- **Single self-contained binary** — no .NET runtime needed on the target
+- **Tiny single binary** — ~15 MB self-contained + trimmed, no .NET runtime needed on the target
 
 ---
 
@@ -254,28 +254,35 @@ dotnet run --project src/DotTop -- --help
 
 ```bash
 # Linux x64 (glibc)
-dotnet publish src/DotTop -c Release -r linux-x64   --self-contained true \
+dotnet publish src/DotTop -c Release -r linux-x64 --self-contained true \
   -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
   -p:EnableCompressionInSingleFile=true \
+  -p:PublishTrimmed=true -p:TrimMode=partial \
   -o publish/linux-x64
 
 # Linux arm64
 dotnet publish src/DotTop -c Release -r linux-arm64 --self-contained true \
   -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
+  -p:EnableCompressionInSingleFile=true \
+  -p:PublishTrimmed=true -p:TrimMode=partial \
   -o publish/linux-arm64
 
 # Alpine / musl
 dotnet publish src/DotTop -c Release -r linux-musl-x64 --self-contained true \
   -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
+  -p:EnableCompressionInSingleFile=true \
+  -p:PublishTrimmed=true -p:TrimMode=partial \
   -o publish/linux-musl-x64
 
 # Windows x64
 dotnet publish src/DotTop -c Release -r win-x64 --self-contained true \
   -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
+  -p:EnableCompressionInSingleFile=true \
+  -p:PublishTrimmed=true -p:TrimMode=partial \
   -o publish/win-x64
 ```
 
-Output is one ~30–40 MB self-contained executable. No .NET runtime needs to be installed on the target.
+Output is one ~15 MB self-contained, trimmed executable (~5 MB compressed). No .NET runtime needs to be installed on the target. Trimming uses `TrimMode=partial` so reflection-heavy dependencies (TraceEvent, Spectre.Cli) are preserved intact — counter parsing and CLI dispatch work as on a full self-contained build.
 
 ---
 
@@ -285,7 +292,7 @@ CI lives in [`.github/workflows`](.github/workflows):
 
 - **`ci.yml`** — builds + cross-publishes a sanity binary on every push to `main` / `master` and every PR.
 - **`release.yml`** — on push to the **`release`** branch (or manual `workflow_dispatch`):
-  1. Cross-publishes single-file binaries for `linux-x64`, `linux-arm64`, `linux-musl-x64`, and `win-x64`.
+  1. Cross-publishes single-file, trimmed binaries for `linux-x64`, `linux-arm64`, `linux-musl-x64`, and `win-x64` (~15 MB each).
   2. Packages each as a tarball / zip with a `SHA256SUMS` file.
   3. Creates a GitHub Release tagged `v0.1.<run_number>` (override via `version_suffix` input) and uploads the artifacts.
 
