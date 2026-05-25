@@ -44,7 +44,7 @@ Grab the latest single-file binary from the [Releases](../../releases) page.
 ### Linux (glibc — Debian, Ubuntu, RHEL, etc.)
 
 ```bash
-curl -sLO https://github.com/ismkdc/dottop/releases/latest/download/dottop-<ver>-linux-x64.tar.gz
+curl -sLO https://github.com/ismkdc/dottop/releases/latest/download/dottop-0.1.1-linux-x64.tar.gz
 tar -xzf dottop-*-linux-x64.tar.gz
 sudo install -m 755 dottop /usr/local/bin/dottop
 dottop --help
@@ -53,7 +53,7 @@ dottop --help
 ### Linux ARM64 (e.g. Raspberry Pi 4/5, AWS Graviton)
 
 ```bash
-curl -sLO https://github.com/ismkdc/dottop/releases/latest/download/dottop-<ver>-linux-arm64.tar.gz
+curl -sLO https://github.com/ismkdc/dottop/releases/latest/download/dottop-0.1.1-linux-arm64.tar.gz
 tar -xzf dottop-*-linux-arm64.tar.gz
 sudo install -m 755 dottop /usr/local/bin/dottop
 ```
@@ -61,14 +61,14 @@ sudo install -m 755 dottop /usr/local/bin/dottop
 ### Alpine / musl
 
 ```bash
-curl -sLO https://github.com/ismkdc/dottop/releases/latest/download/dottop-<ver>-linux-musl-x64.tar.gz
+curl -sLO https://github.com/ismkdc/dottop/releases/latest/download/dottop-0.1.1-linux-musl-x64.tar.gz
 tar -xzf dottop-*-linux-musl-x64.tar.gz
 sudo install -m 755 dottop /usr/local/bin/dottop
 ```
 
 ### Windows
 
-Download `dottop-<ver>-win-x64.zip` from Releases, extract `dottop.exe`, drop it on your `PATH`.
+Download `dottop-0.1.1-win-x64.zip` from Releases, extract `dottop.exe`, drop it on your `PATH`.
 
 ---
 
