@@ -46,7 +46,7 @@ public static class ProcessPicker
 
         var prompt = new SelectionPrompt<DotNetProcessInfo>()
             .Title("Select a process to attach to:")
-            .PageSize(Math.Min(15, processes.Count))
+            .PageSize(Math.Max(3, Math.Min(15, processes.Count)))
             .MoreChoicesText("[grey](Move up and down to reveal more)[/]")
             .UseConverter(p => $"{p.Pid,7}  {p.Name,-30}  {p.RuntimeVersion ?? "?",-12}  {(p.DiagnosticsReachable ? "ready" : "locked")}")
             .AddChoices(processes);
