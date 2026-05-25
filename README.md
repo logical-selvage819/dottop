@@ -207,7 +207,10 @@ For sidecar / ephemeral-debug containers, mount an `emptyDir` and start `dottop`
 
 ### Kestrel (`Microsoft-AspNetCore-Server-Kestrel`)
 
-Current and total connections.
+| Metric             | Source counter        |
+|--------------------|-----------------------|
+| Active connections | `current-connections` |
+| Total connections  | `total-connections`   |
 
 ---
 
