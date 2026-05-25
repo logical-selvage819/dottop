@@ -356,4 +356,4 @@ Make sure SSH allocates a TTY: `ssh -t user@host dottop`. Or use `dottop probe` 
 
 ## License
 
-Add a `LICENSE` file at the repo root — MIT is a sensible default for tools like this.
+MIT — see [LICENSE](LICENSE).
